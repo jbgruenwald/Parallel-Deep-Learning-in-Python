@@ -91,7 +91,7 @@ def cost_function(theta1, theta2, input_layer_size, hidden_layer_size, output_la
 
     # forward propagation: calculate cost
     cost = 0.0
-    for training_index in xrange(len(inputs)):
+    for training_index in range(len(inputs)):
         # transform label y[i] from a number to a vector.
         #
         # Note:
@@ -101,16 +101,16 @@ def cost_function(theta1, theta2, input_layer_size, hidden_layer_size, output_la
         #   if y[i] is 0 -> [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
         #   if y[i] is 1 -> [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         outputs = [0] * output_layer_size
-        outputs[labels[training_index]-1] = 1
+        outputs[labels[training_index][0]-1] = 1
 
-        for k in xrange(output_layer_size):
+        for k in range(output_layer_size):
             cost += -outputs[k] * math.log(output_layer[training_index][k]) - (1 - outputs[k]) * math.log(1 - output_layer[training_index][k])
     cost /= len(inputs)
 
     # back propagation: calculate gradiants
     theta1_grad = np.zeros_like(theta1)  # 25x401
     theta2_grad = np.zeros_like(theta2)  # 10x26
-    for index in xrange(len(inputs)):
+    for index in range(len(inputs)):
         # transform label y[i] from a number to a vector.
         outputs = np.zeros((1, output_layer_size))  # (1,10)
         outputs[0][labels[index]-1] = 1
@@ -147,7 +147,7 @@ def gradient_descent(inputs, labels, learningrate=0.8, iteration=50):
     theta1 = rand_theta1
     theta2 = rand_theta2
     cost = 0.0
-    for i in xrange(iteration):
+    for i in range(iteration):
         cost, (theta1_grad, theta2_grad) = cost_function(theta1, theta2,
             Input_layer_size, Hidden_layer_size, Output_layer_size,
             inputs, labels, regular=0)

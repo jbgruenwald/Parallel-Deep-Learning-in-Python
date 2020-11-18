@@ -138,11 +138,11 @@ def cost_function(theta1, theta2, input_layer_size, hidden_layer_size, output_la
     # forward propagation: calculate cost
     time_start = time.time()
     cost = 0.0
-    for training_index in xrange(len(inputs)):
+    for training_index in range(len(inputs)):
         outputs = [0] * output_layer_size
         outputs[labels[training_index]-1] = 1
 
-        for k in xrange(output_layer_size):
+        for k in range(output_layer_size):
             error = -outputs[k] * math.log(output_layer[training_index][k]) - (1 - outputs[k]) * math.log(1 - output_layer[training_index][k])
             cost += error
     cost /= len(inputs)
@@ -154,7 +154,7 @@ def cost_function(theta1, theta2, input_layer_size, hidden_layer_size, output_la
     time_start = time.time()
     theta1_grad = np.zeros_like(theta1)  # 25x401
     theta2_grad = np.zeros_like(theta2)  # 10x26
-    for index in xrange(len(inputs)):
+    for index in range(len(inputs)):
         # transform label y[i] from a number to a vector.
         outputs = np.zeros((1, output_layer_size))  # (1,10)
         outputs[0][labels[index]-1] = 1
@@ -210,15 +210,15 @@ def gradient_descent(inputs, labels, learningrate=0.8, iteration=50):
         theta2 = rand_init_weights(Hidden_layer_size, Output_layer_size)
 
     cost = 0.0
-    for i in xrange(iteration):
+    for i in range(iteration):
         time_iter_start = time.time()
 
         if Distributed is True:
             # Scatter training data and labels.
             sliced_inputs = np.asarray(np.split(inputs, comm.size))
             sliced_labels = np.asarray(np.split(labels, comm.size))
-            inputs_buf = np.zeros((len(inputs)/comm.size, Input_layer_size))
-            labels_buf = np.zeros((len(labels)/comm.size), dtype='uint8')
+            inputs_buf = np.zeros((int(len(inputs)/comm.size), Input_layer_size))
+            labels_buf = np.zeros((int(len(labels)/comm.size)), dtype='uint8')
 
             comm.Barrier()
             if comm.rank == 0:
